@@ -80,3 +80,21 @@ Podczas realizacji projektu występowały problemy związane z konfiguracją śr
 ## 8. Bezpieczeństwo
 
 Aplikacja umożliwia przygotowanie podglądu operacji przed rozpoczęciem sortowania. Pliki nie są przenoszone bez zatwierdzenia operacji przez użytkownika. Historia operacji pozwala na cofnięcie wybranych zmian.
+
+## Benchmark GIL – wyniki pomiarów
+
+Pomiary wykonano w środowisku Python 3.13.5, Windows 11, na procesorze z 8 rdzeniami. GIL był włączony. Test obejmował 8 zadań, po 8 MB danych na zadanie, z wykorzystaniem 8 workerów.
+
+| Scenariusz | Sekwencyjnie | Wątki | Procesy |
+|---|---:|---:|---:|
+| I/O (symulowane oczekiwanie) | 0.40 s | 0.05 s | 0.59 s |
+| CPU – czysty Python (Adler-32) | 1.43 s | 1.34 s | 0.77 s |
+| CPU – biblioteka C (SHA-256) | 0.08 s | 0.02 s | 0.51 s |
+
+### Wnioski dotyczące GIL
+
+W przypadku zadań I/O zastosowanie wątków znacząco skróciło czas wykonania, ponieważ w trakcie oczekiwania na operacje wątki mogą wykonywać inne zadania. W przeprowadzonym teście czas zmniejszył się z 0,40 s do 0,05 s. W zadaniach CPU wykonywanych w czystym Pythonie wątki nie przyniosły istotnego przyspieszenia, ponieważ GIL ogranicza równoległe wykonywanie kodu Python w wielu wątkach. W tym scenariuszu najlepszy wynik uzyskano przy wykorzystaniu procesów, które mogą wykonywać obliczenia na wielu rdzeniach. Dla SHA-256 wątki uzyskały najlepszy wynik, ponieważ operacje wykonywane w bibliotece C mogą zwalniać GIL. Procesy okazały się nieefektywne w tym przypadku ze względu na dodatkowy narzut związany z ich uruchamianiem i obsługą. Wyniki pokazują, że dobór metody współbieżności powinien zależeć od rodzaju wykonywanego zadania. Wątki najlepiej sprawdzają się w operacjach I/O, natomiast procesy są korzystne dla obliczeń CPU wykonywanych w Pythonie.
+
+### Problemy napotkane podczas realizacji
+
+Podczas realizacji projektu napotkano problemy związane z konfiguracją środowiska Python oraz uruchamianiem aplikacji na różnych komputerach. Konieczne było instalowanie wymaganych bibliotek i zapewnienie poprawnego działania interfejsu graficznego. W trakcie testowania sprawdzano poprawność skanowania plików, wykrywania duplikatów, analizowania zajętości dysku oraz zapisywania historii operacji. Dodatkowym wyzwaniem było porównanie wydajności metod sekwencyjnych, wątkowych i procesowych, a także interpretacja wpływu GIL na różne typy zadań.
