@@ -1,0 +1,68 @@
+{
+  "system": {
+    "python": "3.13.18",
+    "implementation": "CPython",
+    "system": "Linux 6.18.44-fc-v726",
+    "cpu_count": 2,
+    "gil_enabled": true,
+    "workers": 2,
+    "files": 8,
+    "file_size_mb": 8.0
+  },
+  "rows": [
+    {
+      "scenario": "I/O (symulowane oczekiwanie)",
+      "mode": "sequential",
+      "seconds": 0.40117079199998784,
+      "speedup": 1.0
+    },
+    {
+      "scenario": "I/O (symulowane oczekiwanie)",
+      "mode": "thread",
+      "seconds": 0.20126264699999297,
+      "speedup": 1.99326997820913
+    },
+    {
+      "scenario": "I/O (symulowane oczekiwanie)",
+      "mode": "process",
+      "seconds": 0.20682078400000137,
+      "speedup": 1.939702501079317
+    },
+    {
+      "scenario": "CPU - czysty Python (Adler-32)",
+      "mode": "sequential",
+      "seconds": 0.40307161399999814,
+      "speedup": 1.0
+    },
+    {
+      "scenario": "CPU - czysty Python (Adler-32)",
+      "mode": "thread",
+      "seconds": 0.4097239879999961,
+      "speedup": 0.9837637673291464
+    },
+    {
+      "scenario": "CPU - czysty Python (Adler-32)",
+      "mode": "process",
+      "seconds": 0.2286788390000254,
+      "speedup": 1.7626100244454774
+    },
+    {
+      "scenario": "CPU w bibliotece C (SHA-256)",
+      "mode": "sequential",
+      "seconds": 0.04659087899997871,
+      "speedup": 1.0
+    },
+    {
+      "scenario": "CPU w bibliotece C (SHA-256)",
+      "mode": "thread",
+      "seconds": 0.02913902800000301,
+      "speedup": 1.5989167174681977
+    },
+    {
+      "scenario": "CPU w bibliotece C (SHA-256)",
+      "mode": "process",
+      "seconds": 0.03546118600002046,
+      "speedup": 1.3138556335919456
+    }
+  ]
+}
